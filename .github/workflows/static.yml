@@ -1,16 +1,24 @@
-name: Deploy Website
-
-on: [push]
-
+name: Déploiement du site Booki avec surge
+# Déclenchement du workflow automatiquement lors d'un push sur la branche main
+on: 
+  push:
+    branches:
+      - main
+      
+# Déclaration des jobs
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Deploying to surge
     
     steps:
+      # Etape 1 : Récupération du code avec git clone  
       - uses: actions/checkout@v3
+      # Etape 2 : Installation de node.js sur la machine (nécessaire ä l'installation de surge) 
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      # Etape 3 : Installation de surge
       - run: npm install -g surge
+      # Etape 4 : Déploiement de Booki avec surge
       - run: surge ./ ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
